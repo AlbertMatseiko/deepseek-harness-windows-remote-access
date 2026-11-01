@@ -12,6 +12,8 @@ The story behind the setup, including what did and did not work: [docs/USER-CASE
 
 ## What you get
 
+**No public ingress, tailnet-only.** DSH listens only on `127.0.0.1:3080`; Tailscale Serve publishes it over HTTPS only to devices in your tailnet. Tailscale Funnel is not used. This reduces the attack surface, but it is not an absolute security guarantee — see [docs/SECURITY.md](docs/SECURITY.md).
+
 - DSH runs on the Windows PC and listens only on `127.0.0.1:3080`.
 - Tailscale Serve publishes DSH inside your tailnet over HTTPS.
 - The phone runs **LxBox**, a single sing-box VPN client that can:
