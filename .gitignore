@@ -1,0 +1,30 @@
+# Local-only files (screenshots, APK, research plan, personal notes)
+local/
+
+# Machine-specific configuration
+scripts/config.ps1
+
+# Secrets and runtime credentials
+.env
+*.key
+*.pem
+id_rsa*
+known_hosts
+latest-auth.json
+latest-url.txt
+.credentials.yaml
+
+# Runtime logs and dependencies
+*.log
+node_modules/
+**/node_modules/
+
+# Build artifacts
+*.apk
+*.exe
+*.zip
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

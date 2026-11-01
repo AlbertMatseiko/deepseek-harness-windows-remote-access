@@ -1,0 +1,40 @@
+# Example: %USERPROFILE%\.dsh\profiles\web\cordis.patch.yml
+#
+# This is an optional DSH profile patch for a Windows setup.
+# Pin versions to the DSH runtime; this example targets DSH 0.2.1-rc.5.
+#
+# Install the packages first, for example:
+#   dsh plugin --profile web add dsh-better-sidebar@0.28.2
+#   dsh plugin --profile web add dsh-context
+#   dsh plugin --profile web add dsh-remote@0.8.67
+#   dsh plugin --profile web add @deepseek-ai/dsh-skill-office@0.2.1-rc.5
+#   npm install -g memorix@1.3.0
+#
+# Then merge the entries you need. Do not overwrite an existing patch file:
+# back it up and append entries.
+
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: deepseek-official
+    model: deepseek-flash
+    reasoningEffort: max
+
+# Optional long-term memory via MCP (Memorix).
+# Install: npm install -g memorix@1.3.0
+- insert:
+    - id: memory-memorix
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: memorix
+        transport: stdio
+        command: memorix
+        args: [serve]
+        cwd: !!js process.cwd()
+
+# Optional Office skills.
+# Install: dsh plugin --profile web add @deepseek-ai/dsh-skill-office@0.2.1-rc.5
+# If pnpm blocks the native build: dsh plugin --profile web approve-builds koffi
+- insert:
+    - id: skill-office
+      name: "@deepseek-ai/dsh-skill-office"
