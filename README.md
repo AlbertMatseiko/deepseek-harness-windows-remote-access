@@ -1,8 +1,8 @@
-# DeepSeek Harness Remote Access
+# Set Up DeepSeek Harness on Windows with Remote Control from a Smartphone
 
 **Windows + Tailscale + LxBox + Basic Auth `/latest`**
 
-A personal user case and a reproducible guide for running [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) on Windows and reaching it from an Android phone, while the phone keeps using an existing VPN client (Hiddify/Happ nodes) and Tailscale is needed for only one host.
+A personal user case and a reproducible guide for setting up [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) on Windows with secure remote control from an Android smartphone. The phone keeps using an existing VPN client (Hiddify/Happ nodes), while Tailscale is used only for one host. The design has **no public ingress — it is tailnet-only**.
 
 The story behind the setup, including what did and did not work: [docs/USER-CASE.md](docs/USER-CASE.md). Windows installation: [docs/DSH-WINDOWS.md](docs/DSH-WINDOWS.md).
 
@@ -318,6 +318,34 @@ Logs:
 ```
 
 Details: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
+
+---
+
+## FAQ
+
+### How do I set up DeepSeek Harness on Windows with remote control from a smartphone?
+
+Install DSH on Windows, run the `/latest` scripts, publish DSH through Tailscale Serve, and use LxBox on the phone with a Hiddify outbound plus the built-in Tailscale endpoint. Start with [Windows quick start](#windows-quick-start), then follow [docs/PHONE-LXBOX.md](docs/PHONE-LXBOX.md).
+
+### Can I use DeepSeek Harness with Hiddify/Happ and Tailscale at the same time?
+
+Not as two separate Android VPN apps: Android allows only one active `VpnService`. LxBox solves this by keeping both outbounds inside one sing-box client: Hiddify for normal traffic and a Tailscale endpoint for `*.ts.net`. The official Tailscale and Hiddify apps stay off as VPNs.
+
+### Is there any public ingress?
+
+No. DSH listens only on `127.0.0.1:3080`; Tailscale Serve exposes it only inside the tailnet. Tailscale Funnel is not used. `/latest` is additionally protected by Basic Auth. This reduces the attack surface, but it is not an absolute security guarantee.
+
+### Does this work when the phone and the PC are on different networks?
+
+Yes. Both devices only need internet access and membership in the same tailnet. Tailscale establishes a direct connection when possible and uses an encrypted DERP relay when NAT traversal fails. The PC does not need a public IP or port forwarding.
+
+### How do I change the Basic Auth password?
+
+Run `scripts/setup-auth.ps1` again, restart `start-dsh.ps1` (or the scheduled task), and clear the saved Basic Auth credentials in the phone browser. Full steps: [How to change the Basic Auth password](#how-to-change-the-basic-auth-password).
+
+### Is this an official DeepSeek project?
+
+No. This is a personal user case and a community guide. DeepSeek Harness is an MIT-licensed DeepSeek project; LxBox is a separate GPL-3.0 client and is not bundled here.
 
 ---
 
